@@ -14,7 +14,12 @@ exports.seed = function (knex) {
             instructor_email: "link@hyrule.com",
             instructor_password: "Zelda99",
           },
+          {
+            instructor_name: "Lara Croft",
+            instructor_email: "lara@tombs.com",
+            instructor_password: "ilovedanger96",
+          },
         ])
-        .then(() => console.log("\n== Seed data for users table added. ==\n"));
+        .then(() => console.log("\n== Seed data for instructors table added."));
     });
 };
