@@ -34,16 +34,20 @@ router.get("/:id", validateStudentId, (req, res, next) => {
     });
 });
 
-// POST - A New Student - WORKS -  Need to reject email same
+// POST - A New Student - WORKS -  Need to reject same email
 router.post("/new", validateStudentBody, (req, res, next) => {
   if (!req.body.student_name) {
     res.status(400).json({
       message: "Missing required student_name in request body",
     });
   }
-  Students.addStudent(req.body).then((newStudent) => {
-    res.status(201).json({ message: "Successfully created new student!" });
-  });
+  Students.addStudent(req.body)
+    .then((newStudent) => {
+      res.status(201).json({ message: "Successfully created new student!" });
+    })
+    .catch((err) => {
+      console.log(err, err.message);
+    });
 });
 
 // PUT - Update a student's info - WORKS -  Need to reject email same

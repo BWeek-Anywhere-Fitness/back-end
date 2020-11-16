@@ -6,6 +6,8 @@ module.exports = {
   // function names
   findClasses,
   findClass,
+  deleteClass,
+  updateClass,
 };
 
 function findClasses() {
@@ -42,4 +44,12 @@ function findClass(classid) {
     )
     .where({ "c.id": classid })
     .first();
+}
+
+function updateClass(classid, changes) {
+  return db("classes as c").where("id", classid).update(changes);
+}
+
+function deleteClass(classid) {
+  return db("class").where("id", classid).del();
 }
