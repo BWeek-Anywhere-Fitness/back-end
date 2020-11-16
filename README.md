@@ -28,7 +28,7 @@ Future Update: All instructor endpoints require a token.
 | GET - all instructors | /instructors | (N/A) | Fetches all instructors. |
 | GET - an instructor by ID | /instructors/:id | (N/A) | Fetches an instructor by ID. |
 | POST - add an instructor | /instructors/new | { instructor_name, instructor_email, instructor_password } | Adds a new instructor profile. |
-| POST - a new class by instructor | /instructors/:id/classes/new | { class_name, class_type, class_start, class_duration, class_intensity, class_maxStudents }| Adds a new class for this instructor |
+| POST - a new class by instructor | /instructors/:id/classes/new | { class_name , class_type, class_start, class_duration, class_intensity, class_location, class_maxStudents }| Adds a new class for this instructor |
 | PUT - edit an instructor | /instructors/:id | { instructor_name, instructor_email, instructor_password } | Edits a instructor's profile. |
 | DELETE - delete an instructor | /instructors/:id | (N/A) | Deletes an instructor's profile. |
 Missing: Edit a class, delete a class, 
