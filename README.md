@@ -3,13 +3,13 @@ By Tzong-Lian Tsay
 
 API: https://back-end-active-fitness.herokuapp.com/api/
 
-### **_Endpoints for Students_**
+### **_Endpoints for Guests_**
 No token required for guests.
 | Method | Endpoint | Request Body | Notes |
 | ------ | -------- | ---- | ----- |
 | GET - all classes | /classes | (N/A) | Fetches all classes. |
 | GET - a class by ID | /classes/:id| (N/A) | Fetch a class by ID. |
-
+Missing: POST for login with Auth.
 
 ### **_Endpoints for Students_**
 Future Update: All student endpoints require a token.
@@ -31,7 +31,5 @@ Future Update: All instructor endpoints require a token.
 | POST - a new class by instructor | /instructors/:id/classes/new | { class_name, class_type, class_start, class_duration, class_intensity, class_maxStudents }| Adds a new class for this instructor |
 | PUT - edit an instructor | /instructors/:id | { instructor_name, instructor_email, instructor_password } | Edits a instructor's profile. |
 | DELETE - delete an instructor | /instructors/:id | (N/A) | Deletes an instructor's profile. |
-
-
 Missing: Edit a class, delete a class, 
 
