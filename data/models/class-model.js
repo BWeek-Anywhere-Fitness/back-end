@@ -32,8 +32,8 @@ function findClass(classid) {
     .join("instructors as i", "i.id", "c.instructor_id")
     .select(
       "c.id",
-      "c.class_name",
       "i.instructor_name",
+      "c.class_name",
       "c.class_type",
       "c.class_start",
       "c.class_duration",
@@ -47,9 +47,9 @@ function findClass(classid) {
 }
 
 function updateClass(classid, changes) {
-  return db("classes as c").where("id", classid).update(changes);
+  return db("classes").where("id", classid).update(changes);
 }
 
 function deleteClass(classid) {
-  return db("class").where("id", classid).del();
+  return db("classes").where("id", classid).del();
 }
