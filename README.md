@@ -7,6 +7,6 @@ API: https://back-end-active-fitness.herokuapp.com/api/
 
 | Method | Endpoint | Body | Notes |
 | ------ | -------- | ---- | ----- |
-| GET - classes | /classes | Fetches all classes |
-| GET - a class by ID | /classes/:id| Fetch a class by ID |
+| GET - classes | /classes | (N/A) | Fetches all classes |
+| GET - a class by ID | /classes/:id| (N/A) | Fetch a class by ID |
 
