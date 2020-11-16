@@ -3,7 +3,7 @@ By Tzong-Lian Tsay
 
 API: https://back-end-active-fitness.herokuapp.com/api/
 
-### **_Endpoints for the Guests_**
+### **_Endpoints for Students_**
 No token required for guests.
 | Method | Endpoint | Request Body | Notes |
 | ------ | -------- | ---- | ----- |
@@ -11,7 +11,7 @@ No token required for guests.
 | GET - a class by ID | /classes/:id| (N/A) | Fetch a class by ID. |
 
 
-### **_Endpoints for the Instructors_**
+### **_Endpoints for Students_**
 Future Update: All student endpoints require a token.
 | Method | Endpoint | Request Body | Notes |
 | ------ | -------- | ---- | ----- |
