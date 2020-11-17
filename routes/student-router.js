@@ -42,10 +42,6 @@ router.get("/:id/classes", validateStudentId, (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      next({
-        code: 500,
-        message: "Crashed on getting classes by student's ID",
-      });
     });
 });
 
@@ -61,7 +57,15 @@ router.post("/new", validateStudentBody, (req, res, next) => {
       res.status(201).json({ message: "Successfully created new student!" });
     })
     .catch((err) => {
-      console.log(err, err.message);
+      if (err.errno === 19) {
+        res.status(400).json({
+          message: "Email has already been registered!",
+        });
+      }
+      next({
+        code: 500,
+        message: "Crashed on getting classes by student's ID",
+      });
     });
 });
 

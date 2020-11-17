@@ -9,6 +9,7 @@ module.exports = {
   deleteClass,
   updateClass,
   findStudentsByClass,
+  addStudentToClass,
 };
 
 function findClasses() {
@@ -57,18 +58,16 @@ function deleteClass(classid) {
 }
 
 function findStudentsByClass(id) {
-  return db("students as s")
-    .join("classes_students as cs", "cs.student_id", "s.id")
-    .join("classes as c", "c.id", "cs.class_id")
-    .where("c.id", id)
-    .pluck("student_id");
+  return (
+    db("students as s")
+      .join("classes_students as cs", "cs.student_id", "s.id")
+      .join("classes as c", "c.id", "cs.class_id")
+      .where("c.id", id)
+      // .pluck("student_id");
+      .select("student_id", "student_name")
+  );
 }
 
-//
-// function findClassesByStudent(id) {
-//   return db("classes as c")
-//     .join("classes_students as cs", "cs.class_id", "c.id")
-//     .join("students as s", "s.id", "cs.student_id")
-//     .where("s.id", id)
-//     .pluck("class_id");
-// }
+function addStudentToClass(student_id, class_id) {
+  return db("classes_students").insert({ student_id, class_id });
+}

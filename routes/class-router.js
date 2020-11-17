@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { addStudentToClass } = require("../data/models/class-model");
 const Classes = require("../data/models/class-model");
 
 const currentTime = new Date().toTimeString();
@@ -45,6 +46,40 @@ router.get("/:id/students", (req, res, next) => {
         message: "Crashed on getting students by class's ID",
       });
     });
+});
+
+// POST - A student to a class
+// need to validate class_id, student_id,
+// save numStudent, check max students, already signed up, then post
+router.post("/:id/students", validateClassId, async (req, res, next) => {
+  try {
+    const studentArray = await Classes.findStudentsByClass(req.params.id);
+    const classObject = await Classes.findClass(req.params.id);
+
+    // check if not at max students
+    if (studentArray.length >= classObject.class_maxStudents) {
+      res.status(400).json({ message: "Class is already at max size." });
+    } else if (
+      // check if student doesn't exist
+      studentArray.filter(
+        (student) => student.student_id === req.body.student_id
+      ).length > 0
+    ) {
+      res
+        .status(400)
+        .json({ message: "Student is already registered for the class." });
+    } else {
+      const newStudent = await Classes.addStudentToClass(
+        req.body.student_id,
+        req.params.id
+      );
+      res.status(200).json({
+        message: `Successfully added Student ${req.body.student_id} to Class ${req.params.id}`,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // PUT - Update a class
