@@ -1,9 +1,10 @@
 # Back-End for Anywhere Fitness
 By Tzong-Lian Tsay
+Nov 16-20, 2020
 
 API: https://back-end-active-fitness.herokuapp.com/api/
 
-### **_Endpoints for Guests_**
+### **_Endpoints for Classes_**
 No token required for /classes and /classes/:id
 | Method | Endpoint | Request Body |
 | ------ | -------- | ---- |
