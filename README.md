@@ -26,7 +26,6 @@ Future Update: All student endpoints require a token.
 | POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | 
 | PUT - edit a student | /students/:id | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | 
 | DELETE - delete a student | /students/:id | N/A | 
-Missing: POST student to register a class
 
 ### **_Endpoints for the Instructors_**
 Future Update: All instructor endpoints require a token.
