@@ -97,9 +97,28 @@ router.post("/new", validateInstructorBody, (req, res, next) => {
       message: "Missing required instructor_name in request body",
     });
   }
-  Instructors.addInstructor(req.body).then((newInstructor) => {
-    res.status(201).json({ message: "Successfully created new instructor!" });
-  });
+
+  const credentials = req.body;
+  const rounds = process.env.BCRYPT_ROUNDS || 8;
+  const hash = bcryptjs.hashSync(credentials.student_password, rounds);
+  credentials.student_password = hash;
+  console.log("hashed credentials: ", credentials);
+
+  Instructors.addInstructor(credentials)
+    .then((newInstructor) => {
+      res.status(201).json({ message: "Successfully created new instructor!" });
+    })
+    .catch((err) => {
+      if (err.errno === 19) {
+        res.status(400).json({
+          message: "Email has already been registered!",
+        });
+      }
+      next({
+        code: 500,
+        message: "Crashed on registering student",
+      });
+    });
 });
 
 // POST - a New Class - WORKS
