@@ -11,6 +11,7 @@ No token required for /classes and /classes/:id
 | GET - fetch all classes | /classes | N/A |
 | GET - fetch a class by ID | /classes/:id | N/A |
 | GET - fetch all students by class's ID (instructor's authorization) | /classes/:id/students | N/A |
+| POST - a student to a class ID (student's authorization) | /classes/:id/students | { student_id: integer } |
 | PUT - edit a class (instructor's authorization) | /classes/:id | < later > |
 | DELETE - delete a class (instructor's authorization) | /classes/:id | N/A |
 Missing: POST for login with Auth. (Will attempt PassportJS+OAuth)
