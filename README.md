@@ -14,6 +14,7 @@ No token required for /classes and /classes/:id
 | POST - a student to a class ID (student's authorization) | /classes/:id/students | { student_id: integer } |
 | PUT - edit a class (instructor's authorization) | /classes/:id | < later > |
 | DELETE - delete a class (instructor's authorization) | /classes/:id | N/A |
+| DELETE - delete a student from a class (student's authorization) | /classes/:id/students | {student_id: integer} |
 Missing: POST for login with Auth. (Will attempt PassportJS+OAuth)
 
 ### **_Endpoints for Students_**
