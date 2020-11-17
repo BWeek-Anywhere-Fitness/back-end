@@ -1,13 +1,28 @@
 const router = require("express").Router();
+const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../auth/secrets");
+
 const Students = require("../data/models/student-model");
 // const protected = require("../auth/protected-middleware.js");
 // add protected middleware after validation middlewares
 
-const currentTime = new Date().toTimeString();
+function makeToken(student) {
+  const payload = {
+    subject: student.id,
+    student_email: student.student_email,
+  };
+  const options = {
+    expiresIn: "7 days",
+  };
+  return jwt.sign(payload, jwtSecret, options);
+}
 
 // GET - Test - WORKS
 router.get("/test", (req, res) => {
-  res.status(200).json({ message: "Students Endpoint " + currentTime });
+  res
+    .status(200)
+    .json({ message: "Students Endpoint " + new Date().toTimeString() });
 });
 
 // GET - All students - WORKS
@@ -45,6 +60,29 @@ router.get("/:id/classes", validateStudentId, (req, res, next) => {
     });
 });
 
+// POST - Student Login
+router.post("/login", (req, res, next) => {
+  const { student_email, student_password } = req.body;
+  Students.findStudentBy({ student_email: student_email })
+    .then(([student]) => {
+      console.log(student);
+      if (
+        student &&
+        bcryptjs.compareSync(student_password, student.student_password)
+      ) {
+        const token = makeToken(student);
+        res
+          .status(200)
+          .json({ message: `Successful login by ${student_email}`, token });
+      } else {
+        res.status(401).json({ message: "Invalid student credentials" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
 // POST - A New Student - WORKS -  Need to reject same email
 router.post("/new", validateStudentBody, (req, res, next) => {
   if (!req.body.student_name) {
@@ -52,7 +90,13 @@ router.post("/new", validateStudentBody, (req, res, next) => {
       message: "Missing required student_name in request body",
     });
   }
-  Students.addStudent(req.body)
+  const credentials = req.body;
+  const rounds = process.env.BCRYPT_ROUNDS || 8;
+  const hash = bcryptjs.hashSync(credentials.student_password, rounds);
+  credentials.student_password = hash;
+  console.log("hashed credentials: ", credentials);
+
+  Students.addStudent(credentials)
     .then((newStudent) => {
       res.status(201).json({ message: "Successfully created new student!" });
     })
@@ -64,7 +108,7 @@ router.post("/new", validateStudentBody, (req, res, next) => {
       }
       next({
         code: 500,
-        message: "Crashed on getting classes by student's ID",
+        message: "Crashed on registering student",
       });
     });
 });

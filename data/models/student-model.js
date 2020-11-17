@@ -6,6 +6,7 @@ module.exports = {
   /// function names
   findStudents,
   findStudent,
+  findStudentBy,
   addStudent,
   updateStudent,
   deleteStudent,
@@ -18,6 +19,10 @@ function findStudents() {
 
 function findStudent(id) {
   return db("students").where({ id }).first();
+}
+
+function findStudentBy(filter) {
+  return db("students").where(filter).orderBy("id");
 }
 
 function addStudent(student) {

@@ -1,13 +1,28 @@
 const router = require("express").Router();
+const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../auth/secrets");
+
 const Instructors = require("../data/models/instructor-model");
 // const protected = require("../auth/protected-middleware.js");
 // add protected middleware after validation middlewares
 
-const currentTime = new Date().toTimeString();
+function makeToken(student) {
+  const payload = {
+    subject: student.id,
+    student_email: student.student_email,
+  };
+  const options = {
+    expiresIn: "7 days",
+  };
+  return jwt.sign(payload, jwtSecret, options);
+}
 
 // GET - Test
 router.get("/test", (req, res) => {
-  res.status(200).json({ message: "Instructors Endpoint " + currentTime });
+  res
+    .status(200)
+    .json({ message: "Instructors Endpoint " + new Date().toTimeString() });
 });
 
 // GET - All instructors - WORKS
@@ -46,6 +61,32 @@ router.get("/:id/classes", validateInstructorId, (req, res, next) => {
         code: 500,
         message: "Crashed on getting an instructor's classes",
       });
+    });
+});
+
+// POST - Instructor Login
+router.post("/login", (req, res, next) => {
+  const { instructor_email, instructor_password } = req.body;
+  Instructors.findinstructorBy({ instructor_email: instructor_email })
+    .then(([instructor]) => {
+      console.log(instructor);
+      if (
+        instructor &&
+        bcryptjs.compareSync(
+          instructor_password,
+          instructor.instructor_password
+        )
+      ) {
+        const token = makeToken(instructor);
+        res
+          .status(200)
+          .json({ message: `Successful login by ${instructor_email}`, token });
+      } else {
+        res.status(401).json({ message: "Invalid instructor credentials" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
 });
 
