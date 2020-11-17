@@ -15,7 +15,6 @@ exports.up = function (knex) {
     tbl.float("class_duration", 256).notNullable();
     tbl.string("class_intensity", 256).notNullable();
     tbl.string("class_location", 256).notNullable();
-    tbl.integer("class_numStudents", 256).defaultTo(0).unsigned();
     tbl.integer("class_maxStudents", 256).notNullable().unsigned();
   });
 };

@@ -34,16 +34,39 @@ router.get("/:id", validateStudentId, (req, res, next) => {
     });
 });
 
-// POST - A New Student - WORKS -  Need to reject email same
+// GET - All classes for a student
+router.get("/:id/classes", validateStudentId, (req, res, next) => {
+  Students.findClassesByStudent(req.params.id)
+    .then((classList) => {
+      res.status(200).json(classList);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// POST - A New Student - WORKS -  Need to reject same email
 router.post("/new", validateStudentBody, (req, res, next) => {
   if (!req.body.student_name) {
     res.status(400).json({
       message: "Missing required student_name in request body",
     });
   }
-  Students.addStudent(req.body).then((newStudent) => {
-    res.status(201).json({ message: "Successfully created new student!" });
-  });
+  Students.addStudent(req.body)
+    .then((newStudent) => {
+      res.status(201).json({ message: "Successfully created new student!" });
+    })
+    .catch((err) => {
+      if (err.errno === 19) {
+        res.status(400).json({
+          message: "Email has already been registered!",
+        });
+      }
+      next({
+        code: 500,
+        message: "Crashed on getting classes by student's ID",
+      });
+    });
 });
 
 // PUT - Update a student's info - WORKS -  Need to reject email same

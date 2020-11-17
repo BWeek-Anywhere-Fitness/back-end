@@ -30,7 +30,7 @@ exports.seed = function (knex) {
             class_type: "Adventure",
             class_start: "Tuesdays 6:00 PM",
             class_duration: 2,
-            class_intensity: "Extreme",
+            class_intensity: "Low",
             class_location: "Hyrule",
             class_maxStudents: 8,
           },

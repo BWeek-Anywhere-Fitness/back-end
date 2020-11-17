@@ -96,29 +96,12 @@ router.put(
   }
 );
 
-// Update a class
-// router.put(
-//   "/:id/classes/:id2",
-//   validateClassBody,
-//    validateClassId
-//   validateInstructorId,
-//   (req, res, next) => {
-//     Instructors.updateClass({ ...req.body, instructor_id: req.params.id }).then(
-//       (updatedClass) => {
-//         res.status(201).json({ message: "Successfully updated class!" });
-//       }
-//     );
-//   }
-// );
-
 // DELETE - Delete an instructor - WORKS
 router.delete("/:id", validateInstructorId, (req, res, next) => {
   Instructors.deleteInstructor(req.params.id).then((deletedInstructor) => {
     res.status(200).json({ message: "Successfully deleted instructor!" });
   });
 });
-
-// DELETE - A class
 
 // Middleware - Error Handling
 router.use((err, req, res, next) => {
