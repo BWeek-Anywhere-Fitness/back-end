@@ -18,8 +18,8 @@ Future Update: All student endpoints require a token.
 | GET - fetch all students | /students | (N/A) |
 | GET - fetch a student by ID | /students/:id | (N/A) |
 | GET - fetch a student's classes | /students/:id/classes| (N/A) |
-| POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string, student_password: string } | 
-| PUT - edit a student | /students/:id | { student_email: string (unique), student_name: string, student_password: string } | 
+| POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | 
+| PUT - edit a student | /students/:id | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | 
 | DELETE - delete a student | /students/:id | (N/A) | 
 Missing: POST student to register a class
 
@@ -30,9 +30,9 @@ Future Update: All instructor endpoints require a token.
 | GET - fetch all instructors | /instructors | (N/A) |
 | GET - fetch an instructor by ID | /instructors/:id | (N/A) |
 | GET - fetch all classes by instructor's ID | /instructors/:id/classes | (N/A) | 
-| POST - add an instructor | /instructors/new | { instructor_name, instructor_email, instructor_password } | 
+| POST - add an instructor | /instructors/new | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } |  
 | POST - a new class by instructor's ID | /instructors/:id/classes/new | { class_name , class_type, class_start, class_duration, class_intensity, class_location, class_maxStudents }| 
-| PUT - edit an instructor | /instructors/:id | { instructor_name, instructor_email, instructor_password } | 
+| PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | 
 | DELETE - delete an instructor | /instructors/:id | (N/A) | 
 Missing: Edit a class, delete a class
 
