@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { addStudentToClass } = require("../data/models/class-model");
 const Classes = require("../data/models/class-model");
 
 const currentTime = new Date().toTimeString();
@@ -94,6 +93,36 @@ router.delete("/:id", validateClassId, (req, res, next) => {
   Classes.deleteClass(req.params.id).then((deletedClass) => {
     res.status(200).json({ message: "Successfully deleted class!" });
   });
+});
+
+// DELETE - From a student to a class
+router.delete("/:id/students", validateClassId, async (req, res, next) => {
+  try {
+    const studentArray = await Classes.findStudentsByClass(req.params.id);
+
+    // check if student exists
+    if (
+      studentArray.filter(
+        (student) => student.student_id === req.body.student_id
+      ).length === 0
+    ) {
+      res
+        .status(400)
+        .json({ message: "Student was already not in the class." });
+    } else {
+      const delID = await Classes.findClassStudentID(
+        req.body.student_id,
+        req.params.id
+      );
+      console.log("delID: ", delID[0]);
+      const delStudent = await Classes.delStudentFromClass(delID[0].id);
+      res.status(200).json({
+        message: `Successfully deleted student ${req.body.student_id} from Class ${req.params.id}`,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 function validateClassBody(req, res, next) {

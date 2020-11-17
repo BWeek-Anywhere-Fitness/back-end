@@ -10,6 +10,8 @@ module.exports = {
   updateClass,
   findStudentsByClass,
   addStudentToClass,
+  delStudentFromClass,
+  findClassStudentID,
 };
 
 function findClasses() {
@@ -24,7 +26,6 @@ function findClasses() {
       "c.class_duration",
       "c.class_intensity",
       "c.class_location",
-      "c.class_numStudents",
       "c.class_maxStudents"
     );
 }
@@ -42,7 +43,6 @@ function findClass(classid) {
       "c.class_duration",
       "c.class_intensity",
       "c.class_location",
-      "c.class_numStudents",
       "c.class_maxStudents"
     )
     .where({ "c.id": classid })
@@ -68,6 +68,20 @@ function findStudentsByClass(id) {
   );
 }
 
+// FOR CLASSES-STUDENTS TABLE
 function addStudentToClass(student_id, class_id) {
   return db("classes_students").insert({ student_id, class_id });
+}
+
+function delStudentFromClass(classStudentID) {
+  return db("classes_students").where("id", classStudentID).del();
+}
+
+// SQLITE3 -
+// select * from classes_students as cs
+// where student_id = 1 and class_id = 4
+function findClassStudentID(student_id, class_id) {
+  return db("classes_students")
+    .where({ student_id: student_id, class_id: class_id })
+    .select("id");
 }
