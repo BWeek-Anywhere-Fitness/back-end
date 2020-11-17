@@ -45,8 +45,19 @@ function findClassesByStudent(id) {
     db("classes as c")
       .join("classes_students as cs", "cs.class_id", "c.id")
       .join("students as s", "s.id", "cs.student_id")
+      .join("instructors as i", "i.id", "c.instructor_id")
       .where("s.id", id)
       // .pluck("class_id");
-      .select("class_id", "class_name")
+      .select(
+        "class_id",
+        "class_name",
+        "class_type",
+        "class_start",
+        "class_duration",
+        "class_intensity",
+        "class_location",
+        "class_maxStudents",
+        "instructor_name"
+      )
   );
 }
