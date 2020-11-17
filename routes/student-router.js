@@ -34,6 +34,21 @@ router.get("/:id", validateStudentId, (req, res, next) => {
     });
 });
 
+// GET - All classes for a student
+router.get("/:id/classes", validateStudentId, (req, res, next) => {
+  Students.findClassesByStudent(req.params.id)
+    .then((classList) => {
+      res.status(200).json(classList);
+    })
+    .catch((err) => {
+      console.log(err);
+      next({
+        code: 500,
+        message: "Crashed on getting classes by student's ID",
+      });
+    });
+});
+
 // POST - A New Student - WORKS -  Need to reject same email
 router.post("/new", validateStudentBody, (req, res, next) => {
   if (!req.body.student_name) {

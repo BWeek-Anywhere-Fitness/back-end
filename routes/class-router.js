@@ -32,6 +32,21 @@ router.get("/:id", validateClassId, (req, res, next) => {
     });
 });
 
+// GET - All students in a class
+router.get("/:id/students", (req, res, next) => {
+  Classes.findStudentsByClass(req.params.id)
+    .then((studentList) => {
+      res.status(200).json(studentList);
+    })
+    .catch((err) => {
+      console.log(err);
+      next({
+        code: 500,
+        message: "Crashed on getting students by class's ID",
+      });
+    });
+});
+
 // PUT - Update a class
 router.put("/:id", validateClassBody, validateClassId, (req, res, next) => {
   Classes.updateClass(req.params.id, req.body).then((updatedClass) => {

@@ -9,6 +9,7 @@ module.exports = {
   addStudent,
   updateStudent,
   deleteStudent,
+  findClassesByStudent,
 };
 
 function findStudents() {
@@ -31,4 +32,18 @@ function updateStudent(id, changes) {
 
 function deleteStudent(id) {
   return db("students").where("id", id).del();
+}
+
+//SQLITE VERSION
+// select * from classes as c
+// join classes_students as cs on cs.class_id=c.id
+// join students as s on s.id=cs.student_id
+// where s.id=1
+
+function findClassesByStudent(id) {
+  return db("classes as c")
+    .join("classes_students as cs", "cs.class_id", "c.id")
+    .join("students as s", "s.id", "cs.student_id")
+    .where("s.id", id)
+    .pluck("class_id");
 }

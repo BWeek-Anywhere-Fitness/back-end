@@ -8,6 +8,7 @@ module.exports = {
   findClass,
   deleteClass,
   updateClass,
+  findStudentsByClass,
 };
 
 function findClasses() {
@@ -32,6 +33,7 @@ function findClass(classid) {
     .join("instructors as i", "i.id", "c.instructor_id")
     .select(
       "c.id",
+      "i.id",
       "i.instructor_name",
       "c.class_name",
       "c.class_type",
@@ -53,3 +55,20 @@ function updateClass(classid, changes) {
 function deleteClass(classid) {
   return db("classes").where("id", classid).del();
 }
+
+function findStudentsByClass(id) {
+  return db("students as s")
+    .join("classes_students as cs", "cs.student_id", "s.id")
+    .join("classes as c", "c.id", "cs.class_id")
+    .where("c.id", id)
+    .pluck("student_id");
+}
+
+//
+// function findClassesByStudent(id) {
+//   return db("classes as c")
+//     .join("classes_students as cs", "cs.class_id", "c.id")
+//     .join("students as s", "s.id", "cs.student_id")
+//     .where("s.id", id)
+//     .pluck("class_id");
+// }
