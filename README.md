@@ -4,7 +4,7 @@ By Tzong-Lian Tsay
 API: https://back-end-active-fitness.herokuapp.com/api/
 
 ### **_Endpoints for Guests_**
-No token required for guests.
+No token required for /classes and /classes/:id
 | Method | Endpoint | Request Body |
 | ------ | -------- | ---- |
 | GET - fetch all classes | /classes | (N/A) |
@@ -17,10 +17,11 @@ Future Update: All student endpoints require a token.
 | ------ | -------- | ---- | 
 | GET - fetch all students | /students | (N/A) |
 | GET - fetch a student by ID | /students/:id | (N/A) |
-| POST - add a student | /students/new | { student_name, student_email, student_password } | 
-| PUT - edit a student | /students/:id | { student_name, student_email, student_password } | 
+| GET - fetch a student's classes | /students/:id/classes| (N/A) |
+| POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string, student_password: string } | 
+| PUT - edit a student | /students/:id | { student_email: string (unique), student_name: string, student_password: string } | 
 | DELETE - delete a student | /students/:id | (N/A) | 
-Missing: GET all classes by student, POST student to register a class
+Missing: POST student to register a class
 
 ### **_Endpoints for the Instructors_**
 Future Update: All instructor endpoints require a token.
