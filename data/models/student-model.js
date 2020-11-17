@@ -41,9 +41,12 @@ function deleteStudent(id) {
 // where s.id=1
 
 function findClassesByStudent(id) {
-  return db("classes as c")
-    .join("classes_students as cs", "cs.class_id", "c.id")
-    .join("students as s", "s.id", "cs.student_id")
-    .where("s.id", id)
-    .pluck("class_id");
+  return (
+    db("classes as c")
+      .join("classes_students as cs", "cs.class_id", "c.id")
+      .join("students as s", "s.id", "cs.student_id")
+      .where("s.id", id)
+      // .pluck("class_id");
+      .select("class_id", "class_name")
+  );
 }
