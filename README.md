@@ -6,7 +6,7 @@ API: https://back-end-active-fitness.herokuapp.com/api/
 
 ### **_Endpoints for Classes_**
 No token required for /classes and /classes/:id
-| Method | Endpoint | Request Body | Response |
+| Method | Endpoint | Request Body | JSON Response |
 | ------ | -------- | ---- | ---- |
 | GET - fetch all classes | /classes | N/A | Array of Class Objects |
 | GET - fetch a class by ID | /classes/:id | N/A | Class Object |
@@ -18,7 +18,7 @@ No token required for /classes and /classes/:id
 
 ### **_Endpoints for Students_**
 Future Update: All student endpoints require a token.
-| Method | Endpoint | Request Body | Response |
+| Method | Endpoint | Request Body | JSON Response |
 | ------ | -------- | ---- | ---- |
 | GET - fetch all students | /students | N/A | Array of Student Objects |
 | GET - fetch a student by ID | /students/:id | N/A | Student Object |
@@ -31,13 +31,13 @@ Future Update: All student endpoints require a token.
 ### **_Endpoints for the Instructors_**
 Future Update: All instructor endpoints require a token.
 | Method | Endpoint | Request Body | 
-| ------ | -------- | ---- | 
-| GET - fetch all instructors | /instructors | N/A |
-| GET - fetch an instructor by ID | /instructors/:id | N/A |
-| GET - fetch all classes by instructor's ID | /instructors/:id/classes | N/A | 
-| POST - Login | /instructors/login | { instructor_email: string,</br> instructor_password: string }|
-| POST - add an instructor | /instructors/new | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } |  
-| POST - a new class by instructor's ID | /instructors/:id/classes/new | { class_name , class_type, class_start, class_duration, class_intensity, class_location, class_maxStudents }| 
-| PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | 
-| DELETE - delete an instructor | /instructors/:id | N/A | 
+| ------ | -------- | ---- | ---- |
+| GET - fetch all instructors | /instructors | N/A | Array of Instructor Objects |
+| GET - fetch an instructor by ID | /instructors/:id | N/A | Instructor Object |
+| GET - fetch all classes by instructor's ID | /instructors/:id/classes | N/A | Array of Class Objects |
+| POST - Login | /instructors/login | { instructor_email: string,</br> instructor_password: string }| { < Success Message >, </br> instructor_id: integer,</br> token: string } |
+| POST - add an instructor | /instructors/new | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | < Success Message > |
+| POST - a new class by instructor's ID | /instructors/:id/classes/new | { class_name , class_type, class_start, class_duration, class_intensity, class_location, class_maxStudents }| < Success Message > |
+| PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | < Success Message > |
+| DELETE - delete an instructor | /instructors/:id | N/A | < Success Message > |
 
