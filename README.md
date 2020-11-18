@@ -30,7 +30,7 @@ Future Update: All student endpoints require a token.
 
 ### **_Endpoints for the Instructors_**
 Future Update: All instructor endpoints require a token.
-| Method | Endpoint | Request Body | 
+| Method | Endpoint | Request Body | JSON Response |
 | ------ | -------- | ---- | ---- |
 | GET - fetch all instructors | /instructors | N/A | Array of Instructor Objects |
 | GET - fetch an instructor by ID | /instructors/:id | N/A | Instructor Object |
