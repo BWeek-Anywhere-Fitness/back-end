@@ -5,7 +5,6 @@ Nov 16-20, 2020
 API: https://back-end-active-fitness.herokuapp.com/api
 
 ### **_Endpoints for Classes_**
-No token required for /classes and /classes/:id
 | Method | Endpoint | Request Body | Token Type | JSON Response |
 | ------ | -------- | ---- | ---- | ----|
 | GET - fetch all classes | /classes | N/A | N/A | Array of Class Objects |
@@ -17,7 +16,6 @@ No token required for /classes and /classes/:id
 | DELETE - delete a student from a class | /classes/:id/students | {student_id: integer} | Admin or Student | < Success Message > |
 
 ### **_Endpoints for Students_**
-Future Update: All student endpoints require a token.
 | Method | Endpoint | Request Body | Token Type | JSON Response |
 | ------ | -------- | ---- | ---- | ---- |
 | GET - fetch all students | /students | N/A | Admin | Array of Student Objects |
@@ -29,7 +27,6 @@ Future Update: All student endpoints require a token.
 | DELETE - delete a student | /students/:id | N/A | < Success Message > |
 
 ### **_Endpoints for the Instructors_**
-Future Update: All instructor endpoints require a token.
 | Method | Endpoint | Request Body | Token Type | JSON Response |
 | ------ | -------- | ---- | ---- | ---- |
 | GET - fetch all instructors | /instructors | N/A | N/A | Array of Instructor Objects |
