@@ -12,7 +12,7 @@ No token required for /classes and /classes/:id
 | GET - fetch a class by ID | /classes/:id | N/A | Class Object |
 | GET - fetch all students by class's ID (instructor's authorization) | /classes/:id/students | N/A | Array of Student Objects |
 | POST - a student to a class ID (student's authorization) | /classes/:id/students | { student_id: integer } | < Success Message > |
-| PUT - edit a class (instructor's authorization) | /classes/:id | < later > | < Success Message > |
+| PUT - edit a class (instructor's authorization) | /classes/:id |  { class_name: string ,</br> class_type: string,</br> class_start: string,</br> class_duration: integer,</br> class_intensity: string,</br> class_location: string,</br> class_maxStudents:integer } | < Success Message > |
 | DELETE - delete a class (instructor's authorization) | /classes/:id | N/A | < Success Message > |
 | DELETE - delete a student from a class (student's authorization) | /classes/:id/students | {student_id: integer} | < Success Message > |
 
@@ -37,7 +37,7 @@ Future Update: All instructor endpoints require a token.
 | GET - fetch all classes by instructor's ID | /instructors/:id/classes | N/A | Array of Class Objects |
 | POST - Login | /instructors/login | { instructor_email: string,</br> instructor_password: string }| { < Success Message >, </br> instructor_id: integer,</br> token: string } |
 | POST - add an instructor | /instructors/new | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | < Success Message > |
-| POST - a new class by instructor's ID | /instructors/:id/classes/new | { class_name , class_type, class_start, class_duration, class_intensity, class_location, class_maxStudents }| < Success Message > |
+| POST - a new class by instructor's ID | /instructors/:id/classes/new | { class_name: string ,</br> class_type: string,</br> class_start: string,</br> class_duration: integer,</br> class_intensity: string,</br> class_location: string,</br> class_maxStudents:integer }| < Success Message > |
 | PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | < Success Message > |
 | DELETE - delete an instructor | /instructors/:id | N/A | < Success Message > |
 
