@@ -19,7 +19,7 @@ No token required for /classes and /classes/:id
 ### **_Endpoints for Students_**
 Future Update: All student endpoints require a token.
 | Method | Endpoint | Request Body | Response |
-| ------ | -------- | ---- | 
+| ------ | -------- | ---- | ---- |
 | GET - fetch all students | /students | N/A | Array of Student Objects |
 | GET - fetch a student by ID | /students/:id | N/A | Student Object |
 | GET - fetch a student's classes | /students/:id/classes| N/A | Array of Class Objects |
