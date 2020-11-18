@@ -9,8 +9,8 @@ const Students = require("../data/models/student-model");
 
 function makeToken(student) {
   const payload = {
-    subject: student.id,
-    student_email: student.student_email,
+    role: "student",
+    id: student.id,
   };
   const options = {
     expiresIn: "7 days",

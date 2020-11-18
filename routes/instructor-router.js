@@ -7,10 +7,10 @@ const Instructors = require("../data/models/instructor-model");
 // const protected = require("../auth/protected-middleware.js");
 // add protected middleware after validation middlewares
 
-function makeToken(student) {
+function makeToken(instructor) {
   const payload = {
-    subject: student.id,
-    student_email: student.student_email,
+    role: "instructor",
+    id: instructor.id,
   };
   const options = {
     expiresIn: "7 days",
