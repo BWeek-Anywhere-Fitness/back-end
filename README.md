@@ -6,15 +6,15 @@ API: https://back-end-active-fitness.herokuapp.com/api
 
 ### **_Endpoints for Classes_**
 No token required for /classes and /classes/:id
-| Method | Endpoint | Request Body | JSON Response |
-| ------ | -------- | ---- | ---- |
-| GET - fetch all classes | /classes | N/A | Array of Class Objects |
-| GET - fetch a class by ID | /classes/:id | N/A | Class Object |
-| GET - fetch all students by class's ID (instructor's authorization) | /classes/:id/students | N/A | Array of Student Objects |
-| POST - a student to a class ID (student's authorization) | /classes/:id/students | { student_id: integer } | < Success Message > |
-| PUT - edit a class (instructor's authorization) | /classes/:id |  { class_name: string ,</br> class_type: string,</br> class_start: string,</br> class_duration: integer,</br> class_intensity: string,</br> class_location: string,</br> class_maxStudents: integer } | < Success Message > |
-| DELETE - delete a class (instructor's authorization) | /classes/:id | N/A | < Success Message > |
-| DELETE - delete a student from a class (student's authorization) | /classes/:id/students | {student_id: integer} | < Success Message > |
+| Method | Endpoint | Request Body | Token Type | JSON Response |
+| ------ | -------- | ---- | ---- | ----|
+| GET - fetch all classes | /classes | N/A | N/A | Array of Class Objects |
+| GET - fetch a class by ID | /classes/:id | N/A | N/A | Class Object |
+| GET - fetch all students by class's ID | /classes/:id/students | N/A | Admin or Instructor | Array of Student Objects |
+| POST - a student to a class ID | /classes/:id/students | { student_id: integer } | Admin or Student | < Success Message > |
+| PUT - edit a class | /classes/:id |  { class_name: string ,</br> class_type: string,</br> class_start: string,</br> class_duration: integer,</br> class_intensity: string,</br> class_location: string,</br> class_maxStudents: integer } | Admin or Instructor | < Success Message > |
+| DELETE - delete a class | /classes/:id | N/A | Admin or Instructor | < Success Message > |
+| DELETE - delete a student from a class | /classes/:id/students | {student_id: integer} | Admin or Student | < Success Message > |
 
 ### **_Endpoints for Students_**
 Future Update: All student endpoints require a token.
