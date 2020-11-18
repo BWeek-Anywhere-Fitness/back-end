@@ -71,9 +71,11 @@ router.post("/login", (req, res, next) => {
         bcryptjs.compareSync(student_password, student.student_password)
       ) {
         const token = makeToken(student);
-        res
-          .status(200)
-          .json({ message: `Successful login by ${student_email}`, token });
+        res.status(200).json({
+          message: `Successful login by ${student_email}`,
+          student_id: student.id,
+          token,
+        });
       } else {
         res.status(401).json({ message: "Invalid student credentials" });
       }

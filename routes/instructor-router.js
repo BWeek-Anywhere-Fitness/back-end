@@ -67,7 +67,7 @@ router.get("/:id/classes", validateInstructorId, (req, res, next) => {
 // POST - Instructor Login
 router.post("/login", (req, res, next) => {
   const { instructor_email, instructor_password } = req.body;
-  Instructors.findinstructorBy({ instructor_email: instructor_email })
+  Instructors.findInstructorBy({ instructor_email: instructor_email })
     .then(([instructor]) => {
       console.log(instructor);
       if (
@@ -78,9 +78,11 @@ router.post("/login", (req, res, next) => {
         )
       ) {
         const token = makeToken(instructor);
-        res
-          .status(200)
-          .json({ message: `Successful login by ${instructor_email}`, token });
+        res.status(200).json({
+          message: `Successful login by ${instructor_email}`,
+          instructor_id: instructor.id,
+          token,
+        });
       } else {
         res.status(401).json({ message: "Invalid instructor credentials" });
       }
@@ -100,8 +102,8 @@ router.post("/new", validateInstructorBody, (req, res, next) => {
 
   const credentials = req.body;
   const rounds = process.env.BCRYPT_ROUNDS || 8;
-  const hash = bcryptjs.hashSync(credentials.student_password, rounds);
-  credentials.student_password = hash;
+  const hash = bcryptjs.hashSync(credentials.instructor_password, rounds);
+  credentials.instructor_password = hash;
   console.log("hashed credentials: ", credentials);
 
   Instructors.addInstructor(credentials)
