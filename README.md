@@ -24,9 +24,9 @@ Future Update: All student endpoints require a token.
 | GET - fetch a student by ID | /students/:id | N/A | Student Object |
 | GET - fetch a student's classes | /students/:id/classes| N/A | Array of Class Objects |
 | POST - Login | /students/login | { student_email: string,</br> student_password: string }| { < Success Message >, </br> student_id: integer,</br> token: string } |
-| POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | 
-| PUT - edit a student | /students/:id | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | 
-| DELETE - delete a student | /students/:id | N/A | 
+| POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | < Success Message > |
+| PUT - edit a student | /students/:id | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | < Success Message > |
+| DELETE - delete a student | /students/:id | N/A | < Success Message > |
 
 ### **_Endpoints for the Instructors_**
 Future Update: All instructor endpoints require a token.
