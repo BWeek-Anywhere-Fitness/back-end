@@ -47,11 +47,11 @@ Example Instructor Login:
 *{ "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}*
 
 ### Other Features
-- All passwords hashed passwords
-- Token created on user login (expires in 7 days)
+- All passwords are hashed, then saved in the database.
+- Token created on user login (expires in 7 days).
 
 ### Future Updates
 - Check tokens for Admin user or Student/Instructor ID.
 - Write more back-end endpoint tests.
-- Change PUT/DELETE a student from a class to receive Student ID from Header instead of Request Body
+- Change PUT/DELETE a student from a class to receive Student ID from Header instead of Request Body.
 - Rewrite database to have only one user database, instead of separate databases for Students and Instructors.
