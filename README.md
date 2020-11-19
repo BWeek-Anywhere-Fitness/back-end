@@ -1,5 +1,5 @@
 # Back-End for Anywhere Fitness
-By Tzong-Lian Tsay
+By Tzong-Lian Tsay   
 Nov 16-20, 2020
 
 **API: https://back-end-active-fitness.herokuapp.com/api**    
