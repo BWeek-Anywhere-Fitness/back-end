@@ -42,9 +42,9 @@ Project Brief: https://www.notion.so/Anywhere-Fitness-fc0ac268df284aaf8db3ae1913
 #### Notes
 \* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.    
     
-Example Student Login:    
+Example Student Login Credentials:    
 *{ "student_email": "homer@springfield.com", "student_password": "Donuts123"}*    
-Example Instructor Login:    
+Example Instructor Login Credentials:    
 *{ "instructor_email": "mario@mushroomkingdom.com", "instructor_password": "Luigi123"}*
 
 ### Other Features
