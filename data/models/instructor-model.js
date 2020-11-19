@@ -6,13 +6,12 @@ module.exports = {
   // function names
   findInstructors,
   findInstructor,
+  findInstructorBy,
   findInstructorClasses,
   addInstructor,
   updateInstructor,
   deleteInstructor,
   addClass,
-  updateClass,
-  // deleteClass,
 };
 
 function findInstructors() {
@@ -21,6 +20,10 @@ function findInstructors() {
 
 function findInstructor(id) {
   return db("instructors").where({ id }).first();
+}
+
+function findInstructorBy(filter) {
+  return db("instructors").where(filter).orderBy("id");
 }
 
 function findInstructorClasses(instructorid) {
@@ -43,8 +46,4 @@ function deleteInstructor(id) {
 
 function addClass(fitClass) {
   return db("classes").insert(fitClass, "id");
-}
-
-function updateClass(id, changes) {
-  return db("classes").where("id", id).update(changes);
 }

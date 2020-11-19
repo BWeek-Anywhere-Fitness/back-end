@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Classes = require("../data/models/class-model");
+const protected = require("../auth/protected-middleware.js"); // add protected routes middleware after validation middlewares
+// next update: check admin or instructor_id/student_id
 
 const currentTime = new Date().toTimeString();
 
@@ -33,7 +35,7 @@ router.get("/:id", validateClassId, (req, res, next) => {
 });
 
 // GET - All students in a class
-router.get("/:id/students", (req, res, next) => {
+router.get("/:id/students", protected, (req, res, next) => {
   Classes.findStudentsByClass(req.params.id)
     .then((studentList) => {
       res.status(200).json(studentList);
@@ -50,80 +52,96 @@ router.get("/:id/students", (req, res, next) => {
 // POST - A student to a class
 // need to validate class_id, student_id,
 // save numStudent, check max students, already signed up, then post
-router.post("/:id/students", validateClassId, async (req, res, next) => {
-  try {
-    const studentArray = await Classes.findStudentsByClass(req.params.id);
-    const classObject = await Classes.findClass(req.params.id);
+router.post(
+  "/:id/students",
+  protected,
+  validateClassId,
+  async (req, res, next) => {
+    try {
+      const studentArray = await Classes.findStudentsByClass(req.params.id);
+      const classObject = await Classes.findClass(req.params.id);
 
-    // check if not at max students
-    if (studentArray.length >= classObject.class_maxStudents) {
-      res.status(400).json({ message: "Class is already at max size." });
-    } else if (
-      // check if student doesn't exist
-      studentArray.filter(
-        (student) => student.student_id === req.body.student_id
-      ).length > 0
-    ) {
-      res
-        .status(400)
-        .json({ message: "Student is already registered for the class." });
-    } else {
-      const newStudent = await Classes.addStudentToClass(
-        req.body.student_id,
-        req.params.id
-      );
-      res.status(200).json({
-        message: `Successfully added Student ${req.body.student_id} to Class ${req.params.id}`,
-      });
+      // check if not at max students
+      if (studentArray.length >= classObject.class_maxStudents) {
+        res.status(400).json({ message: "Class is already at max size." });
+      } else if (
+        // check if student doesn't exist
+        studentArray.filter(
+          (student) => student.student_id === req.body.student_id
+        ).length > 0
+      ) {
+        res
+          .status(400)
+          .json({ message: "Student is already registered for the class." });
+      } else {
+        const newStudent = await Classes.addStudentToClass(
+          req.body.student_id,
+          req.params.id
+        );
+        res.status(200).json({
+          message: `Successfully added Student ${req.body.student_id} to Class ${req.params.id}`,
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-});
+);
 
 // PUT - Update a class
-router.put("/:id", validateClassBody, validateClassId, (req, res, next) => {
-  Classes.updateClass(req.params.id, req.body).then((updatedClass) => {
-    res.status(200).json({ message: "Successfully updated class info!" });
-  });
-});
+router.put(
+  "/:id",
+  validateClassBody,
+  protected,
+  validateClassId,
+  (req, res, next) => {
+    Classes.updateClass(req.params.id, req.body).then((updatedClass) => {
+      res.status(200).json({ message: "Successfully updated class info!" });
+    });
+  }
+);
 
 // DELETE - Delete a class
-router.delete("/:id", validateClassId, (req, res, next) => {
+router.delete("/:id", protected, validateClassId, (req, res, next) => {
   Classes.deleteClass(req.params.id).then((deletedClass) => {
     res.status(200).json({ message: "Successfully deleted class!" });
   });
 });
 
 // DELETE - From a student to a class
-router.delete("/:id/students", validateClassId, async (req, res, next) => {
-  try {
-    const studentArray = await Classes.findStudentsByClass(req.params.id);
+router.delete(
+  "/:id/students",
+  protected,
+  validateClassId,
+  async (req, res, next) => {
+    try {
+      const studentArray = await Classes.findStudentsByClass(req.params.id);
 
-    // check if student exists
-    if (
-      studentArray.filter(
-        (student) => student.student_id === req.body.student_id
-      ).length === 0
-    ) {
-      res
-        .status(400)
-        .json({ message: "Student was already not in the class." });
-    } else {
-      const delID = await Classes.findClassStudentID(
-        req.body.student_id,
-        req.params.id
-      );
-      console.log("delID: ", delID[0]);
-      const delStudent = await Classes.delStudentFromClass(delID[0].id);
-      res.status(200).json({
-        message: `Successfully deleted student ${req.body.student_id} from Class ${req.params.id}`,
-      });
+      // check if student exists
+      if (
+        studentArray.filter(
+          (student) => student.student_id === req.body.student_id
+        ).length === 0
+      ) {
+        res
+          .status(400)
+          .json({ message: "Student was already not in the class." });
+      } else {
+        const delID = await Classes.findClassStudentID(
+          req.body.student_id,
+          req.params.id
+        );
+        console.log("delID: ", delID[0]);
+        const delStudent = await Classes.delStudentFromClass(delID[0].id);
+        res.status(200).json({
+          message: `Successfully deleted student ${req.body.student_id} from Class ${req.params.id}`,
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-});
+);
 
 function validateClassBody(req, res, next) {
   if (!req.body) {

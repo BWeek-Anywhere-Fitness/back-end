@@ -1,13 +1,29 @@
 const router = require("express").Router();
-const Instructors = require("../data/models/instructor-model");
-// const protected = require("../auth/protected-middleware.js");
-// add protected middleware after validation middlewares
+const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../auth/secrets");
 
-const currentTime = new Date().toTimeString();
+const Instructors = require("../data/models/instructor-model");
+const protected = require("../auth/protected-middleware.js");
+// add protected routes middleware after validation middlewares
+// next update: check admin or instructor_id
+
+function makeToken(instructor) {
+  const payload = {
+    role: "instructor",
+    id: instructor.id,
+  };
+  const options = {
+    expiresIn: "7 days",
+  };
+  return jwt.sign(payload, jwtSecret, options);
+}
 
 // GET - Test
 router.get("/test", (req, res) => {
-  res.status(200).json({ message: "Instructors Endpoint " + currentTime });
+  res
+    .status(200)
+    .json({ message: "Instructors Endpoint " + new Date().toTimeString() });
 });
 
 // GET - All instructors - WORKS
@@ -49,6 +65,34 @@ router.get("/:id/classes", validateInstructorId, (req, res, next) => {
     });
 });
 
+// POST - Instructor Login
+router.post("/login", (req, res, next) => {
+  const { instructor_email, instructor_password } = req.body;
+  Instructors.findInstructorBy({ instructor_email: instructor_email })
+    .then(([instructor]) => {
+      console.log(instructor);
+      if (
+        instructor &&
+        bcryptjs.compareSync(
+          instructor_password,
+          instructor.instructor_password
+        )
+      ) {
+        const token = makeToken(instructor);
+        res.status(200).json({
+          message: `Successful login by ${instructor_email}`,
+          instructor_id: instructor.id,
+          token,
+        });
+      } else {
+        res.status(401).json({ message: "Invalid instructor credentials" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
 // POST - A New Instructor - WORKS -  Need to reject email same
 router.post("/new", validateInstructorBody, (req, res, next) => {
   if (!req.body.instructor_name) {
@@ -56,15 +100,35 @@ router.post("/new", validateInstructorBody, (req, res, next) => {
       message: "Missing required instructor_name in request body",
     });
   }
-  Instructors.addInstructor(req.body).then((newInstructor) => {
-    res.status(201).json({ message: "Successfully created new instructor!" });
-  });
+
+  const credentials = req.body;
+  const rounds = process.env.BCRYPT_ROUNDS || 8;
+  const hash = bcryptjs.hashSync(credentials.instructor_password, rounds);
+  credentials.instructor_password = hash;
+  console.log("hashed credentials: ", credentials);
+
+  Instructors.addInstructor(credentials)
+    .then((newInstructor) => {
+      res.status(201).json({ message: "Successfully created new instructor!" });
+    })
+    .catch((err) => {
+      if (err.errno === 19) {
+        res.status(400).json({
+          message: "Email has already been registered!",
+        });
+      }
+      next({
+        code: 500,
+        message: "Crashed on registering student",
+      });
+    });
 });
 
 // POST - a New Class - WORKS
 router.post(
   "/:id/classes/new",
   validateClassBody,
+  protected,
   validateInstructorId,
   (req, res, next) => {
     Instructors.addClass({ ...req.body, instructor_id: req.params.id }).then(
@@ -79,6 +143,7 @@ router.post(
 router.put(
   "/:id",
   validateInstructorBody,
+  protected,
   validateInstructorId,
   (req, res, next) => {
     if (!req.body.instructor_name) {
@@ -86,18 +151,24 @@ router.put(
         message: "Missing required instructor_name in request body",
       });
     }
-    Instructors.updateInstructor(req.params.id, req.body).then(
-      (updatedInstructor) => {
+    Instructors.updateInstructor(req.params.id, req.body)
+      .then((updatedInstructor) => {
         res
           .status(200)
           .json({ message: "Successfully updated instructor info!" });
-      }
-    );
+      })
+      .catch((err) => {
+        if (err.errno === 19) {
+          res.status(400).json({
+            message: "Email has already been registered!",
+          });
+        }
+      });
   }
 );
 
 // DELETE - Delete an instructor - WORKS
-router.delete("/:id", validateInstructorId, (req, res, next) => {
+router.delete("/:id", protected, validateInstructorId, (req, res, next) => {
   Instructors.deleteInstructor(req.params.id).then((deletedInstructor) => {
     res.status(200).json({ message: "Successfully deleted instructor!" });
   });
