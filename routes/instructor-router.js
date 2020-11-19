@@ -4,8 +4,9 @@ const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../auth/secrets");
 
 const Instructors = require("../data/models/instructor-model");
-// const protected = require("../auth/protected-middleware.js");
-// add protected middleware after validation middlewares
+const protected = require("../auth/protected-middleware.js");
+// add protected routes middleware after validation middlewares
+// next update: check admin or instructor_id
 
 function makeToken(instructor) {
   const payload = {
@@ -127,6 +128,7 @@ router.post("/new", validateInstructorBody, (req, res, next) => {
 router.post(
   "/:id/classes/new",
   validateClassBody,
+  protected,
   validateInstructorId,
   (req, res, next) => {
     Instructors.addClass({ ...req.body, instructor_id: req.params.id }).then(
@@ -141,6 +143,7 @@ router.post(
 router.put(
   "/:id",
   validateInstructorBody,
+  protected,
   validateInstructorId,
   (req, res, next) => {
     if (!req.body.instructor_name) {
@@ -148,18 +151,24 @@ router.put(
         message: "Missing required instructor_name in request body",
       });
     }
-    Instructors.updateInstructor(req.params.id, req.body).then(
-      (updatedInstructor) => {
+    Instructors.updateInstructor(req.params.id, req.body)
+      .then((updatedInstructor) => {
         res
           .status(200)
           .json({ message: "Successfully updated instructor info!" });
-      }
-    );
+      })
+      .catch((err) => {
+        if (err.errno === 19) {
+          res.status(400).json({
+            message: "Email has already been registered!",
+          });
+        }
+      });
   }
 );
 
 // DELETE - Delete an instructor - WORKS
-router.delete("/:id", validateInstructorId, (req, res, next) => {
+router.delete("/:id", protected, validateInstructorId, (req, res, next) => {
   Instructors.deleteInstructor(req.params.id).then((deletedInstructor) => {
     res.status(200).json({ message: "Successfully deleted instructor!" });
   });

@@ -4,8 +4,8 @@ const { jwtSecret } = require("./secrets.js");
 
 module.exports = (req, res, next) => {
   // add code here to verify users are logged in
-  const token = req.headers.authorization.split(" ")[1]; //BEARER VERSION
-  //const token2 = req.headers.authorization;
+  //const token = req.headers.authorization.split(" ")[1]; //BEARER VERSION
+  const token = req.headers.authorization;
   console.log(req.headers);
   if (!token) {
     return res
