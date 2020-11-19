@@ -40,10 +40,10 @@ Nov 16-20, 2020
 
 #### Notes
 \* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.
-*Example Student Login:*
-{ "student_email": "homer@springfield.com", "student_password": "Donuts123"}    
-*Example Instructor Login:*
-{ "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}
+Example Student Login:
+*{ "student_email": "homer@springfield.com", "student_password": "Donuts123"}*    
+Example Instructor Login:
+*{ "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}*
 
 ### Other Features
 - All passwords hashed passwords
