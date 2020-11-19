@@ -2,7 +2,8 @@
 By Tzong-Lian Tsay   
 Nov 16-20, 2020
 
-**API: https://back-end-active-fitness.herokuapp.com/api**    
+**API: https://back-end-active-fitness.herokuapp.com/api**   
+Project Brief: https://www.notion.so/Anywhere-Fitness-fc0ac268df284aaf8db3ae1913fa3134
 
 ### **_Endpoints for Classes_**
 | Method | Endpoint | Request Body | Token Type | JSON Response |
