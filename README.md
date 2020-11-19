@@ -40,9 +40,7 @@ API: https://back-end-active-fitness.herokuapp.com/api
 | DELETE - delete an instructor | /instructors/:id | N/A | Admin or Instructor* | < Success Message > |    
 
 Example Student Login:
-{ "student_email": "homer@springfield.com",</br>
-"student_password": "Donuts123"}    
+{ "student_email": "homer@springfield.com", "student_password": "Donuts123"}    
     
 Example Instructor Login:
-{ "student_email": "mario@mushroomkingdom.com",</br>
-"student_password": "Luigi123"}
+{ "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}
