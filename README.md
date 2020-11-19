@@ -38,7 +38,7 @@ Nov 16-20, 2020
 | PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | Admin or Instructor* | < Success Message > |
 | DELETE - delete an instructor | /instructors/:id | N/A | Admin or Instructor* | < Success Message > |    
 
-## Notes
+#### Notes
 \* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.
    
 Example Student Login:
