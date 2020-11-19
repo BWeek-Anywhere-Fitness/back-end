@@ -2,7 +2,7 @@
 By Tzong-Lian Tsay
 Nov 16-20, 2020
 
-*API: https://back-end-active-fitness.herokuapp.com/api*    
+**API: https://back-end-active-fitness.herokuapp.com/api**    
 
 ### **_Endpoints for Classes_**
 | Method | Endpoint | Request Body | Token Type | JSON Response |
