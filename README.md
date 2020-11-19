@@ -47,3 +47,12 @@ Example Student Login:
 Example Instructor Login:
 { "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}
 
+### Other Features
+- All passwords hashed passwords
+- Token created on user login (expires in 7 days)
+
+### Future Updates
+- Check tokens for Admin user or Student/Instructor ID.
+- Write more back-end endpoint tests.
+- 
+- Rewrite database to have only one user database, instead of separate databases for Students and Instructors.
