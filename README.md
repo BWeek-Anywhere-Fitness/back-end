@@ -2,7 +2,7 @@
 By Tzong-Lian Tsay
 Nov 16-20, 2020
 
-API: https://back-end-active-fitness.herokuapp.com/api
+API: https://back-end-active-fitness.herokuapp.com/api    
 \* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.
 
 ### **_Endpoints for Classes_**
