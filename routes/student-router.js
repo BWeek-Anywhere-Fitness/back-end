@@ -4,8 +4,9 @@ const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../auth/secrets");
 
 const Students = require("../data/models/student-model");
-// const protected = require("../auth/protected-middleware.js");
-// add protected middleware after validation middlewares
+const protected = require("../auth/protected-middleware.js");
+// add protected routes middleware after validation middlewares
+// next update: check admin or student_id
 
 function makeToken(student) {
   const payload = {
@@ -26,7 +27,7 @@ router.get("/test", (req, res) => {
 });
 
 // GET - All students - WORKS
-router.get("/", (req, res, next) => {
+router.get("/", protected, (req, res, next) => {
   Students.findStudents()
     .then((profile) => {
       res.status(200).json(profile);
@@ -38,7 +39,7 @@ router.get("/", (req, res, next) => {
 });
 
 // GET - A Student - WORKS
-router.get("/:id", validateStudentId, (req, res, next) => {
+router.get("/:id", protected, validateStudentId, (req, res, next) => {
   Students.findStudent(req.params.id)
     .then((profile) => {
       res.status(200).json(profile);
@@ -50,7 +51,7 @@ router.get("/:id", validateStudentId, (req, res, next) => {
 });
 
 // GET - All classes for a student
-router.get("/:id/classes", validateStudentId, (req, res, next) => {
+router.get("/:id/classes", protected, validateStudentId, (req, res, next) => {
   Students.findClassesByStudent(req.params.id)
     .then((classList) => {
       res.status(200).json(classList);
@@ -85,7 +86,7 @@ router.post("/login", (req, res, next) => {
     });
 });
 
-// POST - A New Student - WORKS -  Need to reject same email
+// POST - A New Student - WORKS
 router.post("/new", validateStudentBody, (req, res, next) => {
   if (!req.body.student_name) {
     res.status(400).json({
@@ -115,20 +116,35 @@ router.post("/new", validateStudentBody, (req, res, next) => {
     });
 });
 
-// PUT - Update a student's info - WORKS -  Need to reject email same
-router.put("/:id", validateStudentBody, validateStudentId, (req, res, next) => {
-  if (!req.body.student_name) {
-    res.status(400).json({
-      message: "Missing required student_name in request body",
-    });
+// PUT - Update a student's info - WORKS
+router.put(
+  "/:id",
+  validateStudentBody,
+  protected,
+  validateStudentId,
+  (req, res, next) => {
+    if (!req.body.student_name) {
+      res.status(400).json({
+        message: "Missing required student_name in request body",
+      });
+    }
+
+    Students.updateStudent(req.params.id, req.body)
+      .then((updatedStudent) => {
+        res.status(200).json({ message: "Successfully updated student info!" });
+      })
+      .catch((err) => {
+        if (err.errno === 19) {
+          res.status(400).json({
+            message: "Email has already been registered!",
+          });
+        }
+      });
   }
-  Students.updateStudent(req.params.id, req.body).then((updatedStudent) => {
-    res.status(200).json({ message: "Successfully updated student info!" });
-  });
-});
+);
 
 // DELETE - Delete a student - WORKS
-router.delete("/:id", validateStudentId, (req, res, next) => {
+router.delete("/:id", protected, validateStudentId, (req, res, next) => {
   Students.deleteStudent(req.params.id).then((deletedStudent) => {
     res.status(200).json({ message: "Successfully deleted student!" });
   });
