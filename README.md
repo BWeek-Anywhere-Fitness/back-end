@@ -37,6 +37,12 @@ API: https://back-end-active-fitness.herokuapp.com/api
 | POST - add an instructor | /instructors/new | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | N/A | < Success Message > |
 | POST - a new class by instructor's ID | /instructors/:id/classes/new | { class_name: string ,</br> class_type: string,</br> class_start: string,</br> class_duration: integer,</br> class_intensity: string,</br> class_location: string,</br> class_maxStudents: integer }| Admin or Instructor* | < Success Message > |
 | PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | Admin or Instructor* | < Success Message > |
-| DELETE - delete an instructor | /instructors/:id | N/A | Admin or Instructor* | < Success Message > |
+| DELETE - delete an instructor | /instructors/:id | N/A | Admin or Instructor* | < Success Message > |    
 
-
+Example Student Login:
+{ "student_email": "homer@springfield.com",</br>
+"student_password": "Donuts123"}    
+    
+Example Instructor Login:
+{ "student_email": "mario@mushroomkingdom.com",</br>
+"student_password": "Luigi123"}
