@@ -2,8 +2,7 @@
 By Tzong-Lian Tsay
 Nov 16-20, 2020
 
-API: https://back-end-active-fitness.herokuapp.com/api    
-\* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.
+*API: https://back-end-active-fitness.herokuapp.com/api*    
 
 ### **_Endpoints for Classes_**
 | Method | Endpoint | Request Body | Token Type | JSON Response |
@@ -39,9 +38,11 @@ API: https://back-end-active-fitness.herokuapp.com/api
 | PUT - edit an instructor | /instructors/:id | { instructor_email: string (unique),</br> instructor_name: string,</br> instructor_password: string } | Admin or Instructor* | < Success Message > |
 | DELETE - delete an instructor | /instructors/:id | N/A | Admin or Instructor* | < Success Message > |    
 
+\* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.
    
 Example Student Login:
 { "student_email": "homer@springfield.com", "student_password": "Donuts123"}    
     
 Example Instructor Login:
 { "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}
+
