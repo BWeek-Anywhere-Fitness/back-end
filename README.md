@@ -40,11 +40,9 @@ Nov 16-20, 2020
 
 #### Notes
 \* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.
-   
-Example Student Login:
+*Example Student Login:*
 { "student_email": "homer@springfield.com", "student_password": "Donuts123"}    
-    
-Example Instructor Login:
+*Example Instructor Login:*
 { "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}
 
 ### Other Features
@@ -54,5 +52,5 @@ Example Instructor Login:
 ### Future Updates
 - Check tokens for Admin user or Student/Instructor ID.
 - Write more back-end endpoint tests.
-- 
+- Change PUT/DELETE a student from a class to receive Student ID from Header instead of Request Body
 - Rewrite database to have only one user database, instead of separate databases for Students and Instructors.
