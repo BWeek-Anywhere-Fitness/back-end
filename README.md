@@ -45,7 +45,7 @@ Project Brief: https://www.notion.so/Anywhere-Fitness-fc0ac268df284aaf8db3ae1913
 Example Student Login:    
 *{ "student_email": "homer@springfield.com", "student_password": "Donuts123"}*    
 Example Instructor Login:    
-*{ "student_email": "mario@mushroomkingdom.com", "student_password": "Luigi123"}*
+*{ "instructor_email": "mario@mushroomkingdom.com", "instructor_password": "Luigi123"}*
 
 ### Other Features
 - All passwords are hashed, then saved in the database.
