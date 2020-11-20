@@ -1,5 +1,6 @@
 # Back-End for Anywhere Fitness
-By Tzong-Lian Tsay   
+By Tzong-Lian Tsay
+Lambda School Student, Unit 4    
 Nov 16-20, 2020
 
 **API: https://back-end-active-fitness.herokuapp.com/api**   
