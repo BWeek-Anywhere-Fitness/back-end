@@ -25,7 +25,7 @@ Project Brief: https://www.notion.so/Anywhere-Fitness-fc0ac268df284aaf8db3ae1913
 | POST - Login | /students/login | { student_email: string,</br> student_password: string } | N/A |{ < Success Message >, </br> student_id: integer,</br> token: string } |
 | POST - add a student | /students/new | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | N/A | < Success Message > |
 | PUT - edit a student | /students/:id | { student_email: string (unique),</br> student_name: string,</br> student_password: string } | Admin or Student* | < Success Message > |
-| DELETE - delete a student | /students/:id | N/A | < Success Message > |
+| DELETE - delete a student | /students/:id | N/A | Admin or Student* | < Success Message > |
 
 ### **_Endpoints for the Instructors_**
 | Method | Endpoint | Request Body | Token Type | JSON Response |
