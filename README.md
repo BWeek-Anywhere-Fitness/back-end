@@ -52,11 +52,12 @@ Example Instructor Login Credentials:
 - All passwords are hashed, then saved in the database.
 - Token created on user login (expires in 7 days).
 - Checks: 
-    - Cannot register an email more than once 
-    - A student cannot register for a class multiple times.
-    - A student cannot unregister from a class they were originally not enrolled in.
+    - Cannot register an email more than once (once each for student and instructor)
+    - Cannot duplicate-enroll a student in a class.
+    - Cannot unregister a student from a class if they were not registered to begin with.
 
 ### Future Updates
 - Check tokens for Admin user or Student/Instructor ID. (Pull Request made)
+- Current code is development mode only.  Add code for testing and production modes.
 - Write more back-end endpoint tests.
 - Rewrite database to have only one user database, instead of separate databases for Students and Instructors.
