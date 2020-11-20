@@ -51,6 +51,10 @@ Example Instructor Login Credentials:
 ### Other Features
 - All passwords are hashed, then saved in the database.
 - Token created on user login (expires in 7 days).
+- Checks: 
+    - Cannot register an email more than once 
+    - A student cannot register for a class multiple times.
+    - A student cannot unregister from a class they were originally not enrolled in.
 
 ### Future Updates
 - Check tokens for Admin user or Student/Instructor ID. (Pull Request made)
