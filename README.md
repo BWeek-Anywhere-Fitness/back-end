@@ -54,5 +54,4 @@ Example Instructor Login Credentials:
 ### Future Updates
 - Check tokens for Admin user or Student/Instructor ID. (Pull Request made)
 - Write more back-end endpoint tests.
-- Change PUT/DELETE a student from a class to receive Student ID from Header instead of Request Body.
 - Rewrite database to have only one user database, instead of separate databases for Students and Instructors.
