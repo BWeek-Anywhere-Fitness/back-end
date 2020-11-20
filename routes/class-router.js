@@ -67,7 +67,7 @@ router.post(
       } else if (
         // check if student doesn't exist
         studentArray.filter(
-          (student) => student.student_id === req.body.student_id
+          (student) => student.student_id == req.body.student_id
         ).length > 0
       ) {
         res
@@ -120,7 +120,7 @@ router.delete(
       // check if student exists
       if (
         studentArray.filter(
-          (student) => student.student_id === req.body.student_id
+          (student) => student.student_id == req.body.student_id
         ).length === 0
       ) {
         res
