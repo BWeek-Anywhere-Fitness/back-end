@@ -40,7 +40,7 @@ Project Brief: https://www.notion.so/Anywhere-Fitness-fc0ac268df284aaf8db3ae1913
 | DELETE - delete an instructor | /instructors/:id | N/A | Admin or Instructor* | < Success Message > |    
 
 #### Notes
-\* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner.    
+\* - Currently all registered users can make all requests.  Future update will check tokens for Admin user or Student/Instructor ID owner. (Pull request made.)    
     
 Example Student Login Credentials:    
 *{ "student_email": "homer@springfield.com", "student_password": "Donuts123"}*    
@@ -52,7 +52,7 @@ Example Instructor Login Credentials:
 - Token created on user login (expires in 7 days).
 
 ### Future Updates
-- Check tokens for Admin user or Student/Instructor ID.
+- Check tokens for Admin user or Student/Instructor ID. (Pull Request made)
 - Write more back-end endpoint tests.
 - Change PUT/DELETE a student from a class to receive Student ID from Header instead of Request Body.
 - Rewrite database to have only one user database, instead of separate databases for Students and Instructors.
