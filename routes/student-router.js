@@ -28,37 +28,64 @@ router.get("/test", (req, res) => {
 
 // GET - All students - WORKS
 router.get("/", protected, (req, res, next) => {
-  Students.findStudents()
-    .then((profile) => {
-      res.status(200).json(profile);
-    })
-    .catch((err) => {
-      console.log(err);
-      next({ code: 500, message: "Crashed on getting students." });
+  // Check role on token
+  console.log(req.decoded);
+  if (req.decoded.role === "admin") {
+    Students.findStudents()
+      .then((profile) => {
+        res.status(200).json(profile);
+      })
+      .catch((err) => {
+        console.log(err);
+        next({ code: 500, message: "Crashed on getting students." });
+      });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
     });
+  }
 });
 
 // GET - A Student - WORKS
 router.get("/:id", protected, validateStudentId, (req, res, next) => {
-  Students.findStudent(req.params.id)
-    .then((profile) => {
-      res.status(200).json(profile);
-    })
-    .catch((err) => {
-      console.log(err);
-      next({ code: 500, message: "Crashed on getting student by ID" });
+  console.log(req.params.id);
+  if (
+    req.decoded.role === "admin" ||
+    (req.decoded.role === "student" && req.decoded.id == req.params.id)
+  ) {
+    Students.findStudent(req.params.id)
+      .then((profile) => {
+        res.status(200).json(profile);
+      })
+      .catch((err) => {
+        console.log(err);
+        next({ code: 500, message: "Crashed on getting student by ID" });
+      });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
     });
+  }
 });
 
 // GET - All classes for a student
 router.get("/:id/classes", protected, validateStudentId, (req, res, next) => {
-  Students.findClassesByStudent(req.params.id)
-    .then((classList) => {
-      res.status(200).json(classList);
-    })
-    .catch((err) => {
-      console.log(err);
+  if (
+    req.decoded.role === "admin" ||
+    (req.decoded.role === "student" && req.decoded.id == req.params.id)
+  ) {
+    Students.findClassesByStudent(req.params.id)
+      .then((classList) => {
+        res.status(200).json(classList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
     });
+  }
 });
 
 // POST - Student Login
@@ -128,26 +155,45 @@ router.put(
         message: "Missing required student_name in request body",
       });
     }
-
-    Students.updateStudent(req.params.id, req.body)
-      .then((updatedStudent) => {
-        res.status(200).json({ message: "Successfully updated student info!" });
-      })
-      .catch((err) => {
-        if (err.errno === 19) {
-          res.status(400).json({
-            message: "Email has already been registered!",
-          });
-        }
+    if (
+      req.decoded.role === "admin" ||
+      (req.decoded.role === "student" && req.decoded.id == req.params.id)
+    ) {
+      Students.updateStudent(req.params.id, req.body)
+        .then((updatedStudent) => {
+          res
+            .status(200)
+            .json({ message: "Successfully updated student info!" });
+        })
+        .catch((err) => {
+          if (err.errno === 19) {
+            res.status(400).json({
+              message: "Email has already been registered!",
+            });
+          }
+        });
+    } else {
+      res.status(401).json({
+        message: "Your token doesn't have the authorization to do this.",
       });
+    }
   }
 );
 
 // DELETE - Delete a student - WORKS
 router.delete("/:id", protected, validateStudentId, (req, res, next) => {
-  Students.deleteStudent(req.params.id).then((deletedStudent) => {
-    res.status(200).json({ message: "Successfully deleted student!" });
-  });
+  if (
+    req.decoded.role === "admin" ||
+    (req.decoded.role === "student" && req.decoded.id == req.params.id)
+  ) {
+    Students.deleteStudent(req.params.id).then((deletedStudent) => {
+      res.status(200).json({ message: "Successfully deleted student!" });
+    });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
+    });
+  }
 });
 
 // Middleware - Error Handling

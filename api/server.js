@@ -7,6 +7,7 @@ require("colors");
 const instructorRouter = require("../routes/instructor-router.js");
 const studentRouter = require("../routes/student-router.js");
 const classRouter = require("../routes/class-router.js");
+const adminRouter = require("../routes/admin-router.js");
 
 const server = express();
 server.use(helmet());
@@ -17,6 +18,7 @@ server.use(express.json());
 server.use("/api/instructors", instructorRouter);
 server.use("/api/students", studentRouter);
 server.use("/api/classes", classRouter);
+server.use("/api/admins", adminRouter);
 
 server.get("/", (req, res) => {
   res.json({ api: "Active Fitness API is up!  Go Team 8!" });

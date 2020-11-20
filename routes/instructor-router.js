@@ -119,7 +119,7 @@ router.post("/new", validateInstructorBody, (req, res, next) => {
       }
       next({
         code: 500,
-        message: "Crashed on registering student",
+        message: "Crashed on registering instructor",
       });
     });
 });
@@ -131,11 +131,20 @@ router.post(
   protected,
   validateInstructorId,
   (req, res, next) => {
-    Instructors.addClass({ ...req.body, instructor_id: req.params.id }).then(
-      (newClass) => {
-        res.status(201).json({ message: "Successfully created new class!" });
-      }
-    );
+    if (
+      req.decoded.role === "admin" ||
+      (req.decoded.role === "instructor" && req.decoded.id == req.params.id)
+    ) {
+      Instructors.addClass({ ...req.body, instructor_id: req.params.id }).then(
+        (newClass) => {
+          res.status(201).json({ message: "Successfully created new class!" });
+        }
+      );
+    } else {
+      res.status(401).json({
+        message: "Your token doesn't have the authorization to do this.",
+      });
+    }
   }
 );
 
@@ -151,27 +160,45 @@ router.put(
         message: "Missing required instructor_name in request body",
       });
     }
-    Instructors.updateInstructor(req.params.id, req.body)
-      .then((updatedInstructor) => {
-        res
-          .status(200)
-          .json({ message: "Successfully updated instructor info!" });
-      })
-      .catch((err) => {
-        if (err.errno === 19) {
-          res.status(400).json({
-            message: "Email has already been registered!",
-          });
-        }
+    if (
+      req.decoded.role === "admin" ||
+      (req.decoded.role === "instructor" && req.decoded.id == req.params.id)
+    ) {
+      Instructors.updateInstructor(req.params.id, req.body)
+        .then((updatedInstructor) => {
+          res
+            .status(200)
+            .json({ message: "Successfully updated instructor info!" });
+        })
+        .catch((err) => {
+          if (err.errno === 19) {
+            res.status(400).json({
+              message: "Email has already been registered!",
+            });
+          }
+        });
+    } else {
+      res.status(401).json({
+        message: "Your token doesn't have the authorization to do this.",
       });
+    }
   }
 );
 
 // DELETE - Delete an instructor - WORKS
 router.delete("/:id", protected, validateInstructorId, (req, res, next) => {
-  Instructors.deleteInstructor(req.params.id).then((deletedInstructor) => {
-    res.status(200).json({ message: "Successfully deleted instructor!" });
-  });
+  if (
+    req.decoded.role === "admin" ||
+    (req.decoded.role === "instructor" && req.decoded.id == req.params.id)
+  ) {
+    Instructors.deleteInstructor(req.params.id).then((deletedInstructor) => {
+      res.status(200).json({ message: "Successfully deleted instructor!" });
+    });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
+    });
+  }
 });
 
 // Middleware - Error Handling

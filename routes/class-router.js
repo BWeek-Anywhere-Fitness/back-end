@@ -36,17 +36,26 @@ router.get("/:id", validateClassId, (req, res, next) => {
 
 // GET - All students in a class
 router.get("/:id/students", protected, (req, res, next) => {
-  Classes.findStudentsByClass(req.params.id)
-    .then((studentList) => {
-      res.status(200).json(studentList);
-    })
-    .catch((err) => {
-      console.log(err);
-      next({
-        code: 500,
-        message: "Crashed on getting students by class's ID",
+  if (
+    req.decoded.role === "admin" ||
+    (req.decoded.role === "instructor" && req.decoded.id == req.params.id)
+  ) {
+    Classes.findStudentsByClass(req.params.id)
+      .then((studentList) => {
+        res.status(200).json(studentList);
+      })
+      .catch((err) => {
+        console.log(err);
+        next({
+          code: 500,
+          message: "Crashed on getting students by class's ID",
+        });
       });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
     });
+  }
 });
 
 // POST - A student to a class
@@ -57,33 +66,42 @@ router.post(
   protected,
   validateClassId,
   async (req, res, next) => {
-    try {
-      const studentArray = await Classes.findStudentsByClass(req.params.id);
-      const classObject = await Classes.findClass(req.params.id);
+    if (
+      req.decoded.role === "admin" ||
+      (req.decoded.role === "student" && req.decoded.id == req.body.student_id)
+    ) {
+      try {
+        const studentArray = await Classes.findStudentsByClass(req.params.id);
+        const classObject = await Classes.findClass(req.params.id);
 
-      // check if not at max students
-      if (studentArray.length >= classObject.class_maxStudents) {
-        res.status(400).json({ message: "Class is already at max size." });
-      } else if (
-        // check if student doesn't exist
-        studentArray.filter(
-          (student) => student.student_id === req.body.student_id
-        ).length > 0
-      ) {
-        res
-          .status(400)
-          .json({ message: "Student is already registered for the class." });
-      } else {
-        const newStudent = await Classes.addStudentToClass(
-          req.body.student_id,
-          req.params.id
-        );
-        res.status(200).json({
-          message: `Successfully added Student ${req.body.student_id} to Class ${req.params.id}`,
-        });
+        // check if not at max students
+        if (studentArray.length >= classObject.class_maxStudents) {
+          res.status(400).json({ message: "Class is already at max size." });
+        } else if (
+          // check if student doesn't exist
+          studentArray.filter(
+            (student) => student.student_id === req.body.student_id
+          ).length > 0
+        ) {
+          res
+            .status(400)
+            .json({ message: "Student is already registered for the class." });
+        } else {
+          const newStudent = await Classes.addStudentToClass(
+            req.body.student_id,
+            req.params.id
+          );
+          res.status(200).json({
+            message: `Successfully added Student ${req.body.student_id} to Class ${req.params.id}`,
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      res.status(401).json({
+        message: "Your token doesn't have the authorization to do this.",
+      });
     }
   }
 );
@@ -95,17 +113,35 @@ router.put(
   protected,
   validateClassId,
   (req, res, next) => {
-    Classes.updateClass(req.params.id, req.body).then((updatedClass) => {
-      res.status(200).json({ message: "Successfully updated class info!" });
-    });
+    if (
+      req.decoded.role === "admin" ||
+      (req.decoded.role === "instructor" && req.decoded.id == req.params.id)
+    ) {
+      Classes.updateClass(req.params.id, req.body).then((updatedClass) => {
+        res.status(200).json({ message: "Successfully updated class info!" });
+      });
+    } else {
+      res.status(401).json({
+        message: "Your token doesn't have the authorization to do this.",
+      });
+    }
   }
 );
 
 // DELETE - Delete a class
 router.delete("/:id", protected, validateClassId, (req, res, next) => {
-  Classes.deleteClass(req.params.id).then((deletedClass) => {
-    res.status(200).json({ message: "Successfully deleted class!" });
-  });
+  if (
+    req.decoded.role === "admin" ||
+    (req.decoded.role === "instructor" && req.decoded.id == req.params.id)
+  ) {
+    Classes.deleteClass(req.params.id).then((deletedClass) => {
+      res.status(200).json({ message: "Successfully deleted class!" });
+    });
+  } else {
+    res.status(401).json({
+      message: "Your token doesn't have the authorization to do this.",
+    });
+  }
 });
 
 // DELETE - From a student to a class
@@ -114,31 +150,40 @@ router.delete(
   protected,
   validateClassId,
   async (req, res, next) => {
-    try {
-      const studentArray = await Classes.findStudentsByClass(req.params.id);
+    if (
+      req.decoded.role === "admin" ||
+      (req.decoded.role === "student" && req.decoded.id == req.body.student_id)
+    ) {
+      try {
+        const studentArray = await Classes.findStudentsByClass(req.params.id);
 
-      // check if student exists
-      if (
-        studentArray.filter(
-          (student) => student.student_id === req.body.student_id
-        ).length === 0
-      ) {
-        res
-          .status(400)
-          .json({ message: "Student was already not in the class." });
-      } else {
-        const delID = await Classes.findClassStudentID(
-          req.body.student_id,
-          req.params.id
-        );
-        console.log("delID: ", delID[0]);
-        const delStudent = await Classes.delStudentFromClass(delID[0].id);
-        res.status(200).json({
-          message: `Successfully deleted student ${req.body.student_id} from Class ${req.params.id}`,
-        });
+        // check if student exists
+        if (
+          studentArray.filter(
+            (student) => student.student_id === req.body.student_id
+          ).length === 0
+        ) {
+          res
+            .status(400)
+            .json({ message: "Student was already not in the class." });
+        } else {
+          const delID = await Classes.findClassStudentID(
+            req.body.student_id,
+            req.params.id
+          );
+          console.log("delID: ", delID[0]);
+          const delStudent = await Classes.delStudentFromClass(delID[0].id);
+          res.status(200).json({
+            message: `Successfully deleted student ${req.body.student_id} from Class ${req.params.id}`,
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      res.status(401).json({
+        message: "Your token doesn't have the authorization to do this.",
+      });
     }
   }
 );
